@@ -1,0 +1,777 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>將將好咖啡 GENGENHAO</title>
+  <style>
+    body { font-family: 'Noto Sans TC', sans-serif; padding: 20px; background: #f5f5f5; }
+    h1 { color: #2f4f4f; }
+
+    .cart-section {
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      max-width: 600px;
+      margin: 0 auto;
+    }
+	
+	.cart-item-card {
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 15px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+  }
+
+  .cart-item-card p {
+    margin: 6px 0;
+    color: #333;
+  }
+
+  .cart-item-card input.qty-input {
+    width: 60px;
+    padding: 6px;
+    margin-left: 8px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+  }
+
+  .cart-item-card .remove-btn {
+    background-color: #d9534f;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    padding: 6px 10px;
+    margin-top: 10px;
+    cursor: pointer;
+  }
+
+  .cart-item-card .remove-btn:hover {
+    background-color: #c9302c;
+  }
+
+    .cart-section h2 {
+      color: #2f4f4f;
+      margin-top: 0;
+    }
+
+    .form-group {
+      margin-bottom: 15px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 5px;
+      color: #333;
+    }
+
+	.required {
+	  color: red;
+	}
+
+    input[type="text"], input[type="tel"], input[type="file"], textarea, select {
+      width: 96%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+    }
+
+    .total-price {
+      font-size: 20px;
+      font-weight: bold;
+      color: #2f4f4f;
+      margin: 20px 0;
+    }
+
+    .bank-info {
+      background: #e6f0ed;
+      padding: 10px;
+      border-left: 5px solid #2f4f4f;
+      border-radius: 5px;
+      margin-bottom: 15px;
+    }
+
+    button {
+      background-color: #2f4f4f;
+      color: white;
+      border: none;
+      padding: 12px 20px;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+      width: 100%;
+    }
+
+    button:hover {
+      background-color: #3e605f;
+    }
+
+    .hidden { display: none; }
+	
+	.back-button {
+	  position: fixed;
+	  top: 20px;
+	  left: 20px;
+	  background-color: transparent;
+	  color: #2f4f4f;
+	  font-size: 16px;
+	  padding: 10px 16px;
+	  border: 2px solid #2f4f4f;
+	  border-radius: 8px;
+	  text-decoration: none;
+	  font-weight: bold;
+	  transition: all 0.3s ease;
+	  z-index: 999;
+	}
+
+	.back-button:hover {
+	  background-color: #2f4f4f;
+	  color: #fff;
+	}
+
+	.cart-qty-control {
+	  display: flex;
+	  align-items: center;
+	  gap: 8px;
+	  margin-top: 8px;
+	}
+
+	.cart-btn {
+	  width: 32px;
+	  height: 32px;
+	  font-size: 20px;
+	  border: none;
+	  border-radius: 50%;
+	  background-color: #2f4f4f;
+	  color: white;
+	  cursor: pointer;
+	  transition: background-color 0.2s ease;
+	  display: flex;
+	  align-items: center;
+	  justify-content: center;
+	}
+
+	.cart-btn:hover {
+	  background-color: #3e605f;
+	}
+
+	.cart-qty {
+	  min-width: 24px;
+	  text-align: center;
+	  font-size: 16px;
+	  font-weight: bold;
+	}
+
+	/* 查詢儲值按鈕 */
+	.check-balance-container {
+	  text-align: right;
+	  margin: 10px 0;
+	}
+
+	.check-balance-btn {
+	  background-color: #2f4f4f;
+	  color: #fff;
+	  border: none;
+	  padding: 8px 16px;
+	  border-radius: 6px;
+	  cursor: pointer;
+	  font-size: 14px;
+	  transition: background-color 0.2s ease, box-shadow 0.2s ease;
+	  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+	}
+	.check-balance-btn:hover {
+	  background-color: #3e605f;
+	  box-shadow: 0 3px 6px rgba(0,0,0,0.15);
+	}
+	.check-balance-btn:active {
+	  background-color: #1b4d21;
+	}
+
+	/* Modal 背景與內容 */
+	.modal {
+	  display: none;
+	  position: fixed;
+	  z-index: 1000;
+	  left: 0;
+	  top: 0;
+	  width: 100%;
+	  height: 100%;
+	  overflow: auto;
+	  background-color: rgba(0,0,0,0.5); /* 半透明背景 */
+	}
+	.modal.hidden {
+	  display: none;
+	}
+	.modal-content {
+	  background: #fff;
+	  padding: 20px;
+	  border-radius: 8px;
+	  max-width: 400px;
+	  margin: 10% auto;
+	  position: relative;
+	  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+	}
+	.modal-content h2 {
+	  font-size: 18px;
+	  margin-bottom: 12px;
+	}
+	.modal-content input {
+	  width: 96%;
+	  padding: 8px;
+	  margin: 8px 0;
+	  border: 1px solid #ccc;
+	  border-radius: 4px;
+	}
+	.modal-content p {
+	  margin-top: 8px;
+	  min-height: 20px;
+	  font-size: 14px;
+	}
+	/* 關閉按鈕 */
+	.modal .close {
+	  position: absolute;
+	  top: 10px;
+	  right: 10px;
+	  font-size: 20px;
+	  cursor: pointer;
+	}
+	/* Modal 查詢按鈕 */
+	.modal-check-btn {
+	  background-color: #2f4f4f;
+	  color: #fff;
+	  padding: 8px 16px;
+	  border: none;
+	  border-radius: 6px;
+	  cursor: pointer;
+	  margin-top: 8px;
+	  width: 100%;
+	}
+	.modal-check-btn:hover {
+	  background-color: #3e605f;
+	}
+	
+	input[type=number]::-webkit-inner-spin-button, 
+	input[type=number]::-webkit-outer-spin-button { 
+	  -webkit-appearance: none; 
+	  margin: 0; 
+	}
+	
+	input.use-balance-amount {
+	  width: 150px;
+	  padding: 6px 10px;
+	  font-size: 16px;
+	  border: 1.8px solid #f9c846; /* 向日葵主色系的黃色 */
+	  border-radius: 6px;
+	  background-color: #fff9d9;
+	  color: #8a6d00;
+	  box-shadow: 0 0 5px #f9c84688;
+	  transition: border-color 0.3s ease;
+	}
+
+	input.use-balance-amount:focus {
+	  border-color: #ffcc33;
+	  outline: none;
+	  box-shadow: 0 0 8px #f9c846cc;
+	}
+	
+	@media (max-width: 600px) {
+	  input[type="text"],
+	  input[type="tel"],
+	  textarea,
+	  select,
+	  input.use-balance-amount {
+		width: 96%;          /* 改成100%，讓輸入框撐滿父容器 */
+		max-width: 320px;     /* 最大寬度限制 */
+		padding: 8px 12px;    /* 增加一點內距，手感更好 */
+		font-size: 16px;      /* 字體稍微放大，提升可讀性 */
+		box-sizing: border-box;
+		border-radius: 8px;   /* 加圓角，看起來更柔和 */
+		border: 1.5px solid #ccc;
+	  }
+
+	  /* 如果有包裹輸入框的父容器，建議讓父容器寬度一致 */
+	  .input-container {
+		width: 96%;
+		max-width: 320px;
+		margin: 0 auto;  /* 置中 */
+	  }
+
+	  .modal-content {
+		max-width: 340px; /* 稍微放寬一點 */
+		width: 90vw;
+		margin: 15% auto;
+		padding: 20px;
+		border-radius: 12px;
+	  }
+
+	  button,
+	  .cart-btn {
+		font-size: 16px;
+		padding: 10px 16px;
+	  }
+
+	  .cart-btn {
+		width: 32px;
+		height: 32px;
+	  }
+
+	  .cart-qty-control {
+		gap: 8px;
+	  }
+	}
+
+
+
+
+  </style>
+</head>
+<body>
+
+  <div class="cart-section">
+    <h1>購物車</h1>
+
+	<a href="index.html" class="back-button" aria-label="返回首頁">
+	  ←
+	</a>
+	
+
+    <!-- 商品清單 (這裡之後可用 JS 自動產生) -->
+    <div id="cart-items">
+      <p>購物車沒有商品</p>
+    </div>
+	
+
+    <form id="checkout-form">
+      <div class="form-group">
+		<label for="lineName">Line 名稱 <span class="required">*</span></label>
+        <input type="text" id="lineName" name="lineName" required>
+      </div>
+
+      <div class="form-group">
+		<label for="lineName">聯絡電話 <span class="required">*</span></label>
+        <input type="tel" id="phone" name="phone" required>
+      </div>
+
+      <div class="form-group">
+	  <label for="deliveryMethod">取貨方式 <span class="required">*</span></label>
+	  <select id="deliveryMethod" name="deliveryMethod" required>
+		<option value="pickup">自取</option>
+		<option value="delivery">宅配（運費170元 滿 3000 元免運）</option>
+		<option value="store">7-11 店到店（運費 60 元）</option>
+	  </select>
+	</div>
+
+	<!-- 宅配地址 -->
+	<div class="form-group hidden" id="addressField">
+	  <label for="address">宅配地址 <span class="required">*</span></label>
+	  <textarea id="address" name="address" rows="2"></textarea>
+	</div>
+
+	<!-- 7-11 店到店門市 -->
+	<div class="form-group hidden" id="storeField">
+	  <label for="store_name">取貨門市（7-11 店到店） <span class="required">*</span></label>
+	  <input type="text" id="store_name" name="store_name" placeholder="請輸入取貨門市">
+	</div>
+
+	<label>
+    <input type="checkbox" id="topup-checkbox" name="want_topup">
+    是否加購儲值金？
+  </label>
+
+  <div id="topup-section" style="display: none;">
+    <p style="margin-top: 10px;">
+      <i class="fas fa-info-circle" style="color: #2e7d32;"></i>
+      儲值優惠進行中！<br>
+      ➤ 儲值 <strong>5,000 元送 500 元</strong><br>
+      ➤ 儲值 <strong>10,000 元送 1,000 元</strong><br>
+      可用於咖啡與甜點，使用完為止，不可退費。
+    </p>
+
+    <label for="topup-option">選擇儲值方案：</label>
+    <select id="topup-option" name="topup_option">
+      <option value="">請選擇</option>
+      <option value="5000">儲值 5,000 元（送 500）</option>
+      <option value="10000">儲值 10,000 元（送 1,000）</option>
+    </select>
+
+    <p style="color: red; margin-top: 10px;">
+      ※ 請將本次訂單金額與儲值金額一併轉帳，<br>上傳付款證明時請註明含儲值。
+    </p>
+  </div>
+  
+		<label>
+		  <input type="checkbox" id="use-balance-checkbox"> 是否使用儲值金?
+		</label>
+		<div id="use-balance-section" style="display:none;">
+		  <label for="useBalanceAmount">使用儲值金金額：</label>
+			<input 
+			  type="number" 
+			  id="useBalanceAmount" 
+			  name="used_amount" 
+			  class="use-balance-amount" 
+			  min="0" 
+			  step="1" 
+			  value="0" 
+			  placeholder="請輸入使用金額"
+			/>
+
+		</div>
+  
+	<!-- 查詢儲值餘額按鈕 -->
+		<div class="check-balance-container">
+		  <button id="openBalanceModal" class="check-balance-btn" type="button">查詢儲值餘額</button>
+		</div>
+
+		<!-- Modal -->
+		<div id="balanceModal" class="modal hidden">
+		  <div class="modal-content">
+			<span class="close">&times;</span>
+			<h2>查詢儲值餘額</h2>
+			<input type="text" id="balanceLineName" placeholder="請輸入 Line 名稱">
+			<input type="text" id="balancePhone" placeholder="請輸入電話號碼">
+			<button id="checkBalanceButton" class="modal-check-btn">查詢</button>
+			<p id="balanceResult"></p>
+		  </div>
+		</div>
+
+      <div class="total-price">總金額：$<span id="total">0</span> 元</div>
+
+      <div class="bank-info">
+		  <p><strong>轉帳資訊：</strong><br>
+		  銀行代碼：123<br>
+		  帳號：123456789012<br>
+		  ※ 本店採用轉帳付款，請先完成轉帳並上傳付款截圖。<br>
+		  ※ 若使用儲值金額，請一併截圖輸入框內的使用金額作為付款憑證。</p>
+		</div>
+
+
+      <div class="form-group">
+		<label for="lineName">上傳轉帳截圖 <span class="required">*</span></label>
+        <input type="file" id="paymentProof" name="paymentProof" accept="image/*" required>
+      </div>
+
+      <button type="submit">送出訂單</button>
+    </form>
+  </div>
+</div>
+
+	
+
+<script>
+  // ======== cookie 相關函式 ===========
+  function setCartCookie(cart) {
+    const cartStr = encodeURIComponent(JSON.stringify(cart));
+    const expireDays = 7;
+    const d = new Date();
+    d.setTime(d.getTime() + expireDays * 24 * 60 * 60 * 1000);
+    const expires = "expires=" + d.toUTCString();
+    document.cookie = `cart=${cartStr};${expires};path=/`;
+  }
+
+  function getCartCookie() {
+    const name = "cart=";
+    const decodedCookie = decodeURIComponent(document.cookie);
+    const ca = decodedCookie.split(';');
+    for(let i = 0; i < ca.length; i++) {
+      let c = ca[i].trim();
+      if (c.indexOf(name) === 0) {
+        try {
+          return JSON.parse(c.substring(name.length, c.length));
+        } catch {
+          return [];
+        }
+      }
+    }
+    return [];
+  }
+
+  // ======== 頁面邏輯 =============
+  // 先取得所有元素
+  const methodSelect = document.getElementById('deliveryMethod');
+  const addressField = document.getElementById('addressField');
+  const storeField = document.getElementById('storeField');
+
+  const cartItemsContainer = document.getElementById('cart-items');
+  const totalEl = document.getElementById('total');
+
+  const useBalanceCheckbox = document.getElementById('use-balance-checkbox');
+  const useBalanceSection = document.getElementById('use-balance-section');
+  const usedAmountInput = document.getElementById('useBalanceAmount');
+
+  const topupOptionEl = document.getElementById('topup-option');
+  const topupCheckbox = document.getElementById('topup-checkbox');
+  const topupSection = document.getElementById('topup-section');
+
+  // 儲存可用儲值金，初始為0，從API查詢更新
+  let availableBalance = 0;
+
+  // 取購物車資料，優先從 cookie，沒有再從 localStorage
+  let cart = getCartCookie();
+  if (!cart || cart.length === 0) {
+    cart = JSON.parse(localStorage.getItem('cart')) || [];
+    saveCart(cart); // 同步更新 cookie
+  }
+
+  // 同步存到 localStorage 與 cookie 的函式
+  function saveCart(cart) {
+    localStorage.setItem('cart', JSON.stringify(cart));
+    setCartCookie(cart);
+  }
+
+  // 切換取貨方式
+  methodSelect.addEventListener('change', function() {
+    if (this.value === 'delivery') {
+      addressField.classList.remove('hidden');
+      storeField.classList.add('hidden');
+      document.getElementById('address').required = true;
+      document.getElementById('store_name').required = false;
+    } else if (this.value === 'store') {
+      addressField.classList.add('hidden');
+      storeField.classList.remove('hidden');
+      document.getElementById('store_name').required = true;
+      document.getElementById('address').required = false;
+    } else {
+      addressField.classList.add('hidden');
+      storeField.classList.add('hidden');
+      document.getElementById('address').required = false;
+      document.getElementById('store_name').required = false;
+    }
+    updateTotal();
+  });
+
+  // 使用儲值金勾選事件
+  useBalanceCheckbox.addEventListener('change', () => {
+    useBalanceSection.style.display = useBalanceCheckbox.checked ? 'block' : 'none';
+    if (useBalanceCheckbox.checked) {
+      let currentTotal = parseInt(totalEl.textContent) || 0;
+      let amountToUse = currentTotal > availableBalance ? availableBalance : currentTotal;
+      usedAmountInput.value = amountToUse;
+    } else {
+      usedAmountInput.value = 0;
+    }
+    updateTotal();
+  });
+
+  // 計算單項目小計
+  function calculateItemSubtotal(item) {
+    let subtotal = item.price * item.quantity;
+    if (item.packaging === 'drip' || item.packaging === 'steep') subtotal += 200;
+    return subtotal;
+  }
+
+  // 渲染購物車
+  function renderCart() {
+    if (cart.length === 0) {
+      cartItemsContainer.innerHTML = '<p>購物車沒有商品</p>';
+      totalEl.textContent = '0';
+      return;
+    }
+    cartItemsContainer.innerHTML = '';
+    cart.forEach((item, index) => {
+      const itemEl = document.createElement('div');
+      itemEl.className = 'cart-item-card';
+      itemEl.innerHTML = `
+        <p><strong>${item.name}</strong></p>
+        <p>單價：NT$${item.price}</p>
+        <div class="cart-qty-control">
+          <button class="cart-btn cart-decrease" data-index="${index}">−</button>
+          <span class="cart-qty">${item.quantity}</span>
+          <button class="cart-btn cart-increase" data-index="${index}">＋</button>
+        </div>
+        <p>包裝方式：
+          <select id="packaging-${index}" name="packaging[${index}]" class="packaging-select" data-index="${index}">
+            <option value="none" ${item.packaging==='none'?'selected':''}>咖啡豆</option>
+            <option value="drip" ${item.packaging==='drip'?'selected':''}>濾掛包 +200元</option>
+            <option value="steep" ${item.packaging==='steep'?'selected':''}>浸萃包 +200元</option>
+          </select>
+        </p>
+        <p class="item-subtotal">小計：NT$${calculateItemSubtotal(item)}</p>
+        <button class="remove-btn" data-index="${index}">移除</button>
+      `;
+      cartItemsContainer.appendChild(itemEl);
+      // 監聽包裝選擇改變
+      const select = itemEl.querySelector('.packaging-select');
+      select.addEventListener('change', e => {
+        cart[index].packaging = e.target.value;
+        saveCart(cart);  // 同步更新 cookie
+        const subtotalEl = itemEl.querySelector('.item-subtotal');
+        subtotalEl.textContent = `小計：NT$${calculateItemSubtotal(cart[index])}`;
+        updateTotal();
+      });
+    });
+    updateTotal();
+  }
+
+  // 計算總價並更新畫面
+  function updateTotal() {
+    let productTotal = 0;
+    cart.forEach(item => productTotal += calculateItemSubtotal(item));
+    const deliveryMethod = methodSelect.value;
+    let shippingFee = 0;
+    if (deliveryMethod === 'delivery') {
+      shippingFee = productTotal >= 3000 ? 0 : 170;
+    } else if (deliveryMethod === 'store') {
+      shippingFee = 60;
+    }
+    let topupAmount = topupCheckbox.checked ? parseInt(topupOptionEl.value) || 0 : 0;
+    let subtotal = productTotal + shippingFee + topupAmount;
+
+    let usedAmount = useBalanceCheckbox.checked ? parseInt(usedAmountInput.value) || 0 : 0;
+    if (usedAmount > availableBalance) {
+      usedAmount = availableBalance;
+      usedAmountInput.value = usedAmount;
+    }
+
+    let total = subtotal - usedAmount;
+    if (total < 0) total = 0;
+    totalEl.textContent = total;
+  }
+
+  // 購物車增減、移除按鈕
+  cartItemsContainer.addEventListener('click', e => {
+    const index = e.target.getAttribute('data-index');
+    if (e.target.classList.contains('cart-increase')) {
+      cart[index].quantity++;
+    } else if (e.target.classList.contains('cart-decrease')) {
+      if (cart[index].quantity > 1) cart[index].quantity--;
+    } else if (e.target.classList.contains('remove-btn')) {
+      cart.splice(index, 1);
+    } else return;
+    saveCart(cart);  // 同步更新 cookie
+    renderCart();
+  });
+
+  // 儲值選項顯示/隱藏
+  topupCheckbox.addEventListener('change', () => {
+    topupSection.style.display = topupCheckbox.checked ? 'block' : 'none';
+    updateTotal();
+  });
+  topupOptionEl.addEventListener('change', updateTotal);
+
+  // 結帳送出
+  document.getElementById('checkout-form').addEventListener('submit', e => {
+    e.preventDefault();
+
+    const lineName = document.getElementById('lineName').value.trim();
+    const phone = document.getElementById('phone').value.trim();
+    const deliveryMethod = methodSelect.value;
+    const address = deliveryMethod === 'delivery' ? document.getElementById('address').value.trim() : '';
+    const storeName = deliveryMethod === 'store' ? document.getElementById('store_name').value.trim() : '';
+    const paymentFile = document.getElementById('paymentProof').files[0];
+
+    let topupAmount = topupCheckbox.checked ? parseInt(topupOptionEl.value) : 0;
+    let topupBonus = topupAmount === 5000 ? 500 : (topupAmount === 10000 ? 1000 : 0);
+
+    let productTotal = 0;
+    cart.forEach(item => productTotal += calculateItemSubtotal(item));
+    let shippingFee = 0;
+    if (deliveryMethod === 'delivery') {
+      shippingFee = productTotal >= 3000 ? 0 : 170;
+    } else if (deliveryMethod === 'store') {
+      shippingFee = 60;
+    }
+    let subtotal = productTotal + topupAmount + shippingFee;
+    let usedAmount = useBalanceCheckbox.checked ? parseInt(usedAmountInput.value) || 0 : 0;
+    let total = subtotal - usedAmount;
+    if (total < 0) total = 0;
+
+    const formData = new FormData();
+    formData.append('line_name', lineName);
+    formData.append('phone', phone);
+    formData.append('address', address);
+    formData.append('store_name', storeName);
+    formData.append('delivery', deliveryMethod);
+    formData.append('paymentProof', paymentFile);
+    formData.append('want_topup', topupCheckbox.checked ? '1' : '0');
+    formData.append('topup_amount', topupAmount);
+    formData.append('topup_bonus', topupBonus);
+    formData.append('shipping_fee', shippingFee);
+    formData.append('total_price', total);
+    formData.append('used_amount', usedAmount);
+    formData.append('cart', JSON.stringify(cart));
+
+    fetch('submit_order.php', { method: 'POST', body: formData })
+      .then(res => res.text())
+      .then(() => {
+        alert('訂單送出成功！');
+        localStorage.removeItem('cart');
+        setCartCookie([]);  // 清空 cookie
+        window.location.href = 'thankyou.html';
+      })
+      .catch(err => {
+        console.error('送出錯誤', err);
+        alert('送出失敗，請稍後再試！');
+      });
+  });
+
+  // 儲值餘額查詢
+  document.getElementById('checkBalanceButton').addEventListener('click', () => {
+    const phone = document.getElementById('balancePhone').value.trim();
+    const lineName = document.getElementById('balanceLineName').value.trim();
+
+    if (!phone) {
+      alert('請輸入電話號碼！');
+      return;
+    }
+
+    fetch(`get_balance.php?phone=${encodeURIComponent(phone)}&line_name=${encodeURIComponent(lineName)}`)
+      .then(res => res.json())
+      .then(data => {
+        const balanceResultEl = document.getElementById('balanceResult');
+        if (data.success) {
+          availableBalance = data.balance;
+          balanceResultEl.textContent = `查詢成功，您可用儲值金為：NT$ ${availableBalance}`;
+          if (useBalanceCheckbox.checked) {
+            let currentTotal = parseInt(totalEl.textContent) || 0;
+            usedAmountInput.value = currentTotal > availableBalance ? availableBalance : currentTotal;
+            updateTotal();
+          }
+        } else {
+          availableBalance = 0;
+          balanceResultEl.textContent = data.message || '查詢失敗';
+        }
+      })
+      .catch(err => {
+        availableBalance = 0;
+        document.getElementById('balanceResult').textContent = '發生錯誤，請稍後再試';
+        console.error(err);
+      });
+  });
+
+  // 點擊開啟/關閉查詢視窗
+  const balanceModal = document.getElementById('balanceModal');
+  const openBalanceModal = document.getElementById('openBalanceModal');
+  const closeModal = balanceModal.querySelector('.close');
+
+  openBalanceModal.addEventListener('click', () => {
+    balanceModal.classList.remove('hidden');
+    balanceModal.style.display = 'block';
+  });
+
+  closeModal.addEventListener('click', () => {
+    balanceModal.classList.add('hidden');
+    balanceModal.style.display = 'none';
+  });
+
+  window.addEventListener('click', e => {
+    if (e.target === balanceModal) {
+      balanceModal.classList.add('hidden');
+      balanceModal.style.display = 'none';
+    }
+  });
+
+  // 預設渲染購物車
+  renderCart();
+</script>
+
+
+
+
+
+
+
+</body>
+</html>

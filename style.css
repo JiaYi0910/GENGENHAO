@@ -1,0 +1,418 @@
+
+body {
+  font-family: 'Segoe UI', sans-serif;
+  background-color: #f3f2ef;
+  margin: 0;
+  padding: 0;
+}
+
+/* 開場動畫區 */
+#splash-screen {
+  position: fixed;
+  z-index: 9999;
+  top: 0; left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: #f5f5f5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  animation: fadeOut 1s ease forwards;
+  animation-delay: 2.8s;
+}
+
+#splash-screen img {
+  width: 60%;
+  max-width: 400px;
+  border-radius: 12px;
+  opacity: 0;
+  animation: fadeIn 1.5s ease forwards;
+  animation-delay: 0.5s;
+}
+
+.splash-text {
+  margin-top: 20px;
+  text-align: center;
+  font-size: 24px;
+  color: #2f4f4f;
+  font-weight: bold;
+  opacity: 0;
+  animation: fadeInUp 1s ease forwards;
+  animation-delay: 1.5s;
+}
+
+.splash-text span {
+  font-size: 16px;
+  font-weight: normal;
+  letter-spacing: 2px;
+  display: block;
+}
+
+/* 動畫 keyframes */
+@keyframes fadeIn {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeOut {
+  to { opacity: 0; visibility: hidden; pointer-events: none; }
+}
+
+
+.site-header {
+  background-color: #2f4f4f;
+  color: #fff;
+  text-align: center;
+  padding: 20px;
+}
+.site-header h1 { margin: 0; font-size: 28px; }
+.site-header h2 { margin: 0; font-size: 16px; font-weight: normal; letter-spacing: 2px; }
+
+.notice-bar {
+  background-color: #e6f0ed;
+  border-left: 5px solid #2f4f4f;
+  padding: 15px;
+  margin: 20px;
+  border-radius: 5px;
+}
+.notice-bar h3 { color: #2f4f4f; margin-top: 0; }
+.notice-content p { font-size: 16px; line-height: 1.5; }
+
+.product-list {
+  padding: 20px;
+}
+
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
+  padding: 20px;
+}
+
+.product-card {
+  background-color: #ffffff;
+  border-radius: 10px;
+  border: 1px solid #dcdcdc;
+  box-shadow: 0 4px 10px rgba(0, 64, 64, 0.1);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  padding: 20px;
+}
+
+.product-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 18px rgba(0, 64, 64, 0.2);
+}
+
+.product-title {
+  font-size: 18px;
+  font-weight: bold;
+  color: #264e36;
+  margin-bottom: 8px;
+}
+
+.product-price {
+  color: #c05b2b;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.product-info {
+  font-size: 14px;
+  color: #444;
+  margin-bottom: 4px;
+  line-height: 1.4;
+}
+
+
+.cart-button {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background-color: #2f4f4f;
+  color: white;
+  font-size: 24px;
+  text-decoration: none;
+  padding: 12px;
+  border-radius: 50%;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  z-index: 999;
+  transition: background 0.3s;
+}
+
+.cart-button:hover {
+  background-color: #3e605f;
+}
+
+
+footer {
+  text-align: center;
+  background-color: #2f4f4f;
+  color: #fff;
+  padding: 10px;
+}
+
+.form-section {
+  margin-top: 20px;
+  padding: 1em;
+  border: 1px dashed #aaa;
+  border-radius: 10px;
+  background-color: #f9f9f9;
+}
+
+.product-cart-control {
+  margin-top: 10px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.qty-input {
+  width: 60px;
+  padding: 6px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+
+.add-to-cart-btn {
+  background-color: #2f4f4f;
+  color: white;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 8px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.add-to-cart-btn:hover {
+  background-color: #3e605f;
+}
+
+.search-area {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  justify-content: center;
+  align-items: center;
+  margin: 30px auto 20px;
+}
+
+.search-area input,
+.search-area select {
+  padding: 10px 16px;
+  font-size: 16px;
+  border: 2px solid #2f4f4f;
+  border-radius: 25px;
+  outline: none;
+  background: #fffdf6;
+  transition: all 0.3s ease;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+}
+
+.search-area input:focus,
+.search-area select:focus {
+  border-color: #f2b700;
+  box-shadow: 0 0 0 3px rgba(242, 183, 0, 0.3);
+}
+
+.qty-control {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.qty-btn {
+  width: 32px;
+  height: 32px;
+  font-size: 20px;
+  border: none;
+  border-radius: 50%;
+  background-color: #2f4f4f;
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.qty-btn:hover {
+  background-color: #3e605f;
+}
+
+.qty-value {
+  min-width: 24px;
+  text-align: center;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+
+.modal {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(0,0,0,0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+.modal.hidden { display: none; }
+.modal-content {
+  background: #fffdf5;
+  padding: 20px;
+  border-radius: 12px;
+  text-align: center;
+}
+.modal-buttons {
+  margin-top: 10px;
+}
+.modal-buttons button {
+  margin: 0 5px;
+}
+
+/* Container 限寬 */
+body > div, main, .search-area, .notice-bar {
+  max-width: 960px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 12px;
+  padding-right: 12px;
+}
+
+/* Cookie 通知樣式 */
+.cookie-consent-banner {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background-color: #2f4f4f;
+  color: #f0f0e6;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 20px;
+  font-size: 15px;
+  box-shadow: 0 -4px 8px rgba(0,0,0,0.2);
+  z-index: 10000;
+  flex-wrap: wrap;
+  gap: 12px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.cookie-consent-banner a {
+  color: #f2b700;
+  text-decoration: underline;
+}
+
+.cookie-btn {
+  background-color: #f2b700;
+  border: none;
+  color: #2f4f4f;
+  font-weight: bold;
+  padding: 8px 16px;
+  border-radius: 25px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  flex-shrink: 0;
+}
+
+.cookie-btn:hover {
+  background-color: #d1a500;
+}
+
+  /* footer 隱私權文案 */
+  footer {
+    background-color: #2f4f4f; /* 墨綠色 */
+    color: #f0f0e6;
+    text-align: center;
+    padding: 15px 12px;
+  }
+  footer a {
+    color: #f2b700;
+    text-decoration: underline;
+  }
+  .footer-privacy {
+    margin: 0;
+    font-size: 14px;
+  }
+</style>
+
+
+/* 手機優化 */
+@media (max-width: 600px) {
+  body {
+    font-size: 16px;
+    line-height: 1.5;
+  }
+  .site-header h1 {
+    font-size: 22px;
+  }
+  .site-header h2 {
+    font-size: 14px;
+  }
+  .notice-content p {
+    font-size: 14px;
+  }
+  .search-area {
+    flex-direction: column;
+    gap: 10px; /* 多點間距 */
+    padding: 0 10px;
+  }
+  .search-area input,
+  .search-area select {
+    width: 100%;
+    padding: 8px 12px;       /* 內距稍微減小 */
+    font-size: 16px;
+    border-radius: 12px;     /* 小圓角，比較舒服 */
+    box-shadow: none;        /* 除非需要陰影，手機版通常簡潔 */
+  }
+  
+  /* 如果有搜尋按鈕，這裡也給你一個參考 */
+  .search-area button {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 12px;
+    background-color: #2f4f4f;
+    color: white;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+  }
+  .search-area button:hover {
+    background-color: #3e605f;
+  }
+
+  /* footer */
+  footer {
+    padding: 20px 15px; /* 上下間距加大 */
+    font-size: 14px;
+    line-height: 1.5;
+  }
+  
+  .cart-button {
+    font-size: 20px;
+    padding: 10px;
+  }
+  .modal-content {
+    max-width: 90vw;
+    width: 320px;
+  }
+  
+  .cookie-consent-banner {
+    flex-direction: column;
+    text-align: center;
+    gap: 8px;
+  }
+  .cookie-btn {
+    width: 100%;
+  }
+}
